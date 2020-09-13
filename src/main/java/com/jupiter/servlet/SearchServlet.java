@@ -1,5 +1,7 @@
 package com.jupiter.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jupiter.entity.Item;
 import com.jupiter.external.GitHubClient;
 
 import javax.servlet.ServletException;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
 public class SearchServlet extends HttpServlet {
@@ -20,9 +23,9 @@ public class SearchServlet extends HttpServlet {
         double lon = Double.parseDouble(request.getParameter("lon"));
 
         GitHubClient client = new GitHubClient();
-        String itemsString = client.search(lat, lon, null);
+        List<Item> items = client.search(lat, lon, null);
+        ObjectMapper mapper = new ObjectMapper();
         response.setContentType("application/json");
-        response.getWriter().print(itemsString);
-
+        response.getWriter().print(mapper.writeValueAsString(items));
     }
 }
