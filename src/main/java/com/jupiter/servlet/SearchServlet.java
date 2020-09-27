@@ -23,9 +23,11 @@ public class SearchServlet extends HttpServlet {
         double lon = Double.parseDouble(request.getParameter("lon"));
 
         GitHubClient client = new GitHubClient();
+        response.setContentType("application/json");
         List<Item> items = client.search(lat, lon, null);
         ObjectMapper mapper = new ObjectMapper();
-        response.setContentType("application/json");
-        response.getWriter().print(mapper.writeValueAsString(items));
+
+//        response.getWriter().print(mapper.writeValueAsString(items));
+        mapper.writeValue(response.getWriter(), items);
     }
 }
